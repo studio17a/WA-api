@@ -186,6 +186,7 @@ const editItem = async (req, res) => {
     id,
     name,
     mode,
+    user,
     brand,
     selectedUserId,
     ean,
@@ -202,7 +203,7 @@ const editItem = async (req, res) => {
   }
 
   const item = await Item.findById(id).exec();
-  const user = await User.findById(selectedUserId).exec();
+  // const user = await User.findById(selectedUserId).exec();
   let vehicle = "";
   if (vehicleId) vehicle = await Vehicle.findById(vehicleId).exec();
 
