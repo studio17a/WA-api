@@ -4,7 +4,7 @@ const ObjectId = require("mongodb").ObjectId;
 
 const itemPreparing = async (req, res, next) => {
   sId = req.params.id;
-  // console.log(req.body);
+  console.log(req.body);
   const { items, id, completed } = req.body;
   if (completed != "donez") {
     let finished = true;
@@ -36,6 +36,7 @@ const itemPreparing = async (req, res, next) => {
               }
               if (i?.toDo === "add") {
                 const newItem = {
+                  _id: i._id,
                   garage: i.garageId,
                   user: i.user,
                   name: i.name,
@@ -88,6 +89,7 @@ const itemPreparing = async (req, res, next) => {
         items?.map(async (i) => {
           if (i.toDo === "add") {
             const newItem = {
+              _id: i.id,
               garage: i.garageId,
               user: i.user,
               name: i.name,

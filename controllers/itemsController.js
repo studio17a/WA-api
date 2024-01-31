@@ -133,6 +133,7 @@ const getItemsByUserIdAndService = async (req, res) => {
   //   return res.status(400).json({ message: "No i found" });
   // }
 };
+
 const getItemsByUserName = async (req, res) => {
   // console.log("itemsbyusername...");
   const users = await User.find({
@@ -177,6 +178,7 @@ const getItemsByUserName = async (req, res) => {
 
   res.json(itemsArray);
 };
+
 const editItem = async (req, res) => {
   console.log("edit");
   console.log(req.body);
@@ -225,6 +227,7 @@ const editItem = async (req, res) => {
 };
 
 const addNewItem = async (req, res) => {
+  console.log("addd new item");
   const {
     user,
     garage,
