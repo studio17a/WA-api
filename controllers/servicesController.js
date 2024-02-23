@@ -88,40 +88,42 @@ const getAllServices = async (req, res) => {
 };
 
 const getServicesByVehicleId = async (req, res) => {
-  console.log(`getServicesByVehicleId: ${req.params.vehicleId}`);
+  console.log(
+    `getServicesByVehicleId: ${req.params.vehicleId}, ${req.params.gid}`,
+  );
   const services = await Service.find({
-    garage: req.params.id,
+    garage: req.params.gid,
     vehicle: req.params.vehicleId,
   })
     .sort("date")
     .lean();
 
-  const stservices = await Promise.all(
-    services.map(async (service) => {
-      let s = [];
-      if (service.st?.length > 0) {
-        s = await Promise.all(
-          service.st?.length &&
-            service.st?.map(async (sts) => {
-              const ss = await St.findById(sts).lean().exec();
-              if (ss != null) {
-                return {
-                  ...sts,
-                  _id: ss._id,
-                  name: ss.name,
-                  vat: ss.vat,
-                  price: ss.price,
-                  items: ss.items,
-                };
-              }
-            }),
-        );
-      }
-      return { ...service, st: s };
-    }),
-  );
+  // const stservices = await Promise.all(
+  //   services.map(async (service) => {
+  //     let s = [];
+  //     if (service.st?.length > 0) {
+  //       s = await Promise.all(
+  //         service.st?.length &&
+  //           service.st?.map(async (sts) => {
+  //             const ss = await St.findById(sts).lean().exec();
+  //             if (ss != null) {
+  //               return {
+  //                 ...sts,
+  //                 _id: ss._id,
+  //                 name: ss.name,
+  //                 vat: ss.vat,
+  //                 price: ss.price,
+  //                 items: ss.items,
+  //               };
+  //             }
+  //           }),
+  //       );
+  //     }
+  //     return { ...service, st: s };
+  //   }),
+  // );
 
-  res.json(stservices);
+  res.json(services);
 };
 
 // @desc Create new service
