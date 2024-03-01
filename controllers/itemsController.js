@@ -21,6 +21,13 @@ const getItemsByUserId = async (req, res) => {
   const items = await Item.find({ user: userId });
   res.json(items);
 };
+const getItemsNoUser = async (req, res) => {
+  console.log("GETITEMSNOUSER");
+  const { gid } = req.params;
+
+  const items = await Item.find({ garage: gid });
+  res.json(items);
+};
 
 const getItemsByUserIdAndService = async (req, res) => {
   console.log(`getItemsByUserIdAndService`);
@@ -336,6 +343,7 @@ const delItem = async (req, res) => {
 module.exports = {
   getItemsByUserIdAndService,
   editItem,
+  getItemsNoUser,
   getItemsByUserId,
   getAllItems,
   addNewItem,

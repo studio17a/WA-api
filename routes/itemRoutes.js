@@ -15,5 +15,6 @@ router
 router
   .route("/:gid/itemsbyuseridandservice/:uid")
   .post(itemsController.getItemsByUserIdAndService);
+router.route("/:gid/nouser").post(itemsController.getItemsNoUser);
 
 module.exports = router;
