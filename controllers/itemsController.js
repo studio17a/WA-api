@@ -25,7 +25,7 @@ const getItemsNoUser = async (req, res) => {
   console.log("GETITEMSNOUSER");
   const { gid } = req.params;
 
-  const items = await Item.find({ garage: gid });
+  const items = await Item.find({ garage: gid, user: null });
   res.json(items);
 };
 
