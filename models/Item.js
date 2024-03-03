@@ -44,8 +44,7 @@ const itemSchema = new mongoose.Schema(
       required: false,
     },
     quantity: {
-      type: Integer,
-      required: true,
+      type: Number,
     },
     notes: {
       type: String,

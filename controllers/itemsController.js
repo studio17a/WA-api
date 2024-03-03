@@ -22,7 +22,7 @@ const getItemsByUserId = async (req, res) => {
   res.json(items);
 };
 const getItemsNoUser = async (req, res) => {
-  // console.log("GETITEMSNOUSER");
+  console.log("GETITEMSNOUSER");
   const { gid } = req.params;
 
   const items = await Item.find({ garage: gid, user: null });
@@ -196,6 +196,7 @@ const editItem = async (req, res) => {
     user,
     brand,
     selectedUserId,
+    quantity,
     ean,
     storage,
     vehicleId = null,
@@ -224,6 +225,7 @@ const editItem = async (req, res) => {
   item.name = name;
   item.user = user;
   item.vehicle = vehicle;
+  item.quantity = quantity;
   item.storage = storage;
   item.ean = ean;
   (item.brand = brand), (item.description = description);
@@ -243,6 +245,7 @@ const addNewItem = async (req, res) => {
     vehicleId,
     name,
     storage,
+    quantity,
     description,
     ean,
     notes,
@@ -277,6 +280,7 @@ const addNewItem = async (req, res) => {
       brand,
       vehicleId,
       storage,
+      quantity,
       description,
       ean,
       notes,
@@ -291,6 +295,7 @@ const addNewItem = async (req, res) => {
       brand,
       storage,
       description,
+      quantity,
       ean,
       notes,
       author,
