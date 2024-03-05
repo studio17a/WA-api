@@ -4,6 +4,7 @@ const allowedOrigins = [
   "https://www.warszt.app",
   "http://www.warszt.app",
   "https://tmz89n-3000.csb.app",
+  "https://lydqv3-3000.csb.app",
   "http://tmz89n-3000.csb.app",
 ];
 
