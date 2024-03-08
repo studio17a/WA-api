@@ -28,8 +28,9 @@ const getAllStsByGarageId = async (req, res) => {
 };
 
 const editSt = async (req, res) => {
-  console.log(req.body);
-  const { id, price = 0, items = 0, vat = 0 } = req.body;
+  console.log("XXXXX");
+  // console.log(req.body);
+  const { id, price, items, vat } = req.body;
   // Confirm data
   if (!id) {
     return res
@@ -53,16 +54,8 @@ const editSt = async (req, res) => {
 };
 
 const createNewSts = async (req, res) => {
-  console.log(req.body);
-  const {
-    garage,
-    price = 0,
-    items = 1,
-    vat = 23,
-    predefined,
-    name,
-    toDo,
-  } = req.body;
+  // console.log(req.body);
+  const { garage, price, items, vat, predefined, name, toDo } = req.body;
 
   if (req.body.toDo == "add") {
     const st = await St.create({

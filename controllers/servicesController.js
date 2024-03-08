@@ -16,9 +16,9 @@ const socket = io("https://tg3vhf-3500.csb.app", {
 });
 
 const getAllServices = async (req, res) => {
-  console.log(`getAllServices: ${req.params}`);
+  // console.log(`getAllServices: ${req.params}`);
   // console.log(req.params);
-  console.log(`getAllServices: ${req.params}`);
+  // console.log(`getAllServices: ${req.params}`);
   // Get all services from MongoDB
   // console.log(req.params);
   // console.log("req.params.id");
@@ -37,7 +37,7 @@ const getAllServices = async (req, res) => {
     return res.status(200).json({ message: "No services found" });
   }
 
-  console.log(`getAllServices2`);
+  // console.log(`getAllServices2`);
   // Add username to each service before sending the response
   // See Promise.all with map() here: https://youtu.be/4lqJBBEpjRE
   // You could also do this with a for...of loop
@@ -88,9 +88,9 @@ const getAllServices = async (req, res) => {
 };
 
 const getServicesByVehicleId = async (req, res) => {
-  console.log(
-    `getServicesByVehicleId: ${req.params.vehicleId}, ${req.params.gid}`,
-  );
+  // console.log(
+  //  `getServicesByVehicleId: ${req.params.vehicleId}, ${req.params.gid}`,
+  // );
   const services = await Service.find({
     garage: req.params.gid,
     vehicle: req.params.vehicleId,
@@ -131,15 +131,15 @@ const getServicesByVehicleId = async (req, res) => {
 // @access Private
 const createNewService = async (req, res) => {
   console.log("createNewService");
-  console.log(res.locals.newStId);
+  // console.log(res.locals.newStId);
 
   const preSt = res.locals.newStId.filter((sid) => sid !== undefined);
   const preItem = res.locals.newItemId.filter((iid) => iid !== undefined);
   // const preSt = res.locals.newStId.map((stId) => mongoose.Types.ObjectId(stId));
   // console.log(req.body);
-  console.log(`preItem`);
-  console.log(preItem);
-  console.log(preSt);
+  //console.log(`preItem`);
+  // console.log(preItem);
+  // console.log(preSt);
   const {
     garage,
     st,
@@ -181,7 +181,7 @@ const createNewService = async (req, res) => {
 };
 
 const createNewAppointment = async (req, res) => {
-  console.log("createNewAppointment");
+  //console.log("createNewAppointment");
   const { token } = req.body;
   const foundService = await Service.findOne({ from: token }).exec();
 
@@ -244,8 +244,8 @@ const createNewAppointment = async (req, res) => {
         return data;
       });
 
-    console.log(`admins`);
-    console.log(allow);
+    // console.log(`admins`);
+    // console.log(allow);
     const appointment = await Service.create({
       garage: allow.garageId,
       user: allow.user,
@@ -260,7 +260,7 @@ const createNewAppointment = async (req, res) => {
       authorname: allow.authorname,
     }).then((data) => {
       // console.log(data);
-      console.log("newappointment");
+      //  console.log("newappointment");
       socket.emit("setup", { _id: allow.user });
       socket.on("connected", () => {
         console.log("connected from controller");
@@ -380,7 +380,7 @@ const deleteService = async (req, res) => {
 
   const reply = `Service '${result.title}' with ID ${result._id} deleted`;
 
-  console.log(`deleteService2`);
+  // console.log(`deleteService2`);
   res.json(reply);
 };
 

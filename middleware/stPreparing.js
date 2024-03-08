@@ -34,6 +34,12 @@ const stPreparing = async (req, res, next) => {
               } else {
               }
             } else {
+              console.log("prepering4");
+              const mongoSt = await St.findById(s._id).exec();
+              mongoSt.items = s.items;
+              mongoSt.price = s.price;
+              mongoSt.vat = s.vat;
+              mongoSt.save();
               return s?._id;
             }
           }),
@@ -51,10 +57,10 @@ const stPreparing = async (req, res, next) => {
     }
   } else {
     console.log("no sIdy");
-    console.log(req.body.st);
     const newIds = Promise.all(
       st?.map(async (s) => {
         if (s.toDo === "add") {
+          // console.log(s);
           const newSt = await St.create({
             garage: s.garageId,
             predefined: s.predefined,
