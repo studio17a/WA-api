@@ -151,6 +151,7 @@ const createNewService = async (req, res) => {
     minute,
     title,
     text,
+    uwagi,
     author,
     authorname,
   } = req.body;
@@ -163,6 +164,7 @@ const createNewService = async (req, res) => {
     date,
     vehicle,
     hour,
+    uwagi,
     minute,
     author,
     authorname,
@@ -200,7 +202,7 @@ const createNewAppointment = async (req, res) => {
         hour,
         minute,
         user,
-        notes,
+        uwagi,
         author,
         authorname,
       } = decoded.AppointmentInfo;
@@ -220,7 +222,7 @@ const createNewAppointment = async (req, res) => {
         hour,
         minute,
         user,
-        notes,
+        uwagi,
         author,
         authorname,
       };
@@ -253,6 +255,7 @@ const createNewAppointment = async (req, res) => {
       minute: allow.minute,
       completed: "suggested",
       from: token,
+      uwagi: allow.uwagi,
       author: allow.author,
       authorname: allow.authorname,
     }).then((data) => {
@@ -296,6 +299,7 @@ const updateService = async (req, res) => {
     minute,
     items,
     title,
+    notes,
     text,
     completed,
   } = req.body;
@@ -309,7 +313,7 @@ const updateService = async (req, res) => {
   else iIds = items;
   console.log("updatingservice");
   //res.locals.newStId.map((stId) => mongoose.Types.ObjectId(stId));
-  console.log(res.locals.newItemId);
+  // console.log(res.locals.newItemId);
   // Confirm data
   // if (!id || !user || !vehicle || !date || !hour || !minute) {
   //   return res.status(400).json({ message: "All fields are required" });
@@ -340,6 +344,7 @@ const updateService = async (req, res) => {
   service.st = stIds;
   service.minute = minute;
   service.items = iIds;
+  service.uwagi = notes;
   service.title = title;
   service.text = text;
   service.completed = newcompleted;
