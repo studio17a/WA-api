@@ -50,17 +50,19 @@ const sendEmail = async (req, res) => {
   });
   console.log(req.body);
 
+  async function send(email, subject, text) {
+    const result = await transporter.sendMail({
+      from: "WarsztApp",
+      to: email,
+      subject: subject,
+      text: text,
+    });
+  }
   if (task === "approve") {
-    async function send() {
-      const result = await transporter.sendMail({
-        from: "WarsztApp",
-        to: email,
-        subject: "Dotyczy Twojej wizyty w warsztacie",
-        text: `Zatwierdzono Twoją wizytę w dniu: ${date} o godzinie ${hour}:${minute}.`,
-      });
+    let subject = "Dotyczy Twojej wizyty w warsztacie";
+    let text = `Zatwierdzono Twoją wizytę w dniu: ${date} o godzinie ${hour}:${minute}.`;
 
-      console.log(JSON.stringify(result, null, 4));
-    }
+    send(email, subject, text);
   } else {
     const confirmationToken = jwt.sign(
       {
@@ -79,21 +81,14 @@ const sendEmail = async (req, res) => {
       process.env.ACCESS_TOKEN_SECRET,
       { expiresIn: "15m" },
     );
+
     link = `https://tg3vhf-3000.csb.app/${garageId}/confirmation/${date}/${confirmationToken}`;
 
-    async function send() {
-      const result = await transporter.sendMail({
-        from: "WarsztApp",
-        to: email,
-        subject: "umów wizytę w naszym warsztacie",
-        text: `Potwierdź prośbę o wizytę w ${garageId} w dniu: ${date} o godzinie ${hour}:${minute} klikając w link: ${link}`,
-      });
+    let subject = "umów wizytę w naszym warsztacie";
+    let text = `Potwierdź prośbę o wizytę w ${garageId} w dniu: ${date} o godzinie ${hour}:${minute} klikając w link: ${link}`;
 
-      console.log(JSON.stringify(result, null, 4));
-    }
+    send(email, subject, text);
   }
-
-  send();
 
   res.json({ message: "sent" });
 };
