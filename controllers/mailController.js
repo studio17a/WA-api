@@ -30,6 +30,7 @@ const sendEmail = async (req, res) => {
   console.log(req.body);
   let link = "";
   const {
+    task,
     garageId,
     email,
     date,
@@ -48,36 +49,52 @@ const sendEmail = async (req, res) => {
     },
   });
   console.log(req.body);
-  const confirmationToken = jwt.sign(
-    {
-      AppointmentInfo: {
-        garageId,
-        email,
-        date,
-        hour,
-        minute,
-        user,
-        notes,
-        author,
-        authorname,
+
+  if (task === "approve") {
+    async function send() {
+      const result = await transporter.sendMail({
+        from: "WarsztApp",
+        to: email,
+        subject: "Dotyczy Twojej wizyty w warsztacie",
+        text: `Zatwierdzono Twoją wizytę w dniu: ${date} o godzinie ${hour}:${minute}.`,
+      });
+
+      console.log(JSON.stringify(result, null, 4));
+    }
+  } else {
+    const confirmationToken = jwt.sign(
+      {
+        AppointmentInfo: {
+          garageId,
+          email,
+          date,
+          hour,
+          minute,
+          user,
+          notes,
+          author,
+          authorname,
+        },
       },
-    },
-    process.env.ACCESS_TOKEN_SECRET,
-    { expiresIn: "15m" },
-  );
-  link = `https://warszt.app/${garageId}/confirmation/${date}/${confirmationToken}`;
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: "15m" },
+    );
+    link = `https://tg3vhf-3000.csb.app/${garageId}/confirmation/${date}/${confirmationToken}`;
+
+    async function send() {
+      const result = await transporter.sendMail({
+        from: "WarsztApp",
+        to: email,
+        subject: "umów wizytę w naszym warsztacie",
+        text: `Potwierdź prośbę o wizytę w ${garageId} w dniu: ${date} o godzinie ${hour}:${minute} klikając w link: ${link}`,
+      });
+
+      console.log(JSON.stringify(result, null, 4));
+    }
+  }
+
   send();
 
-  async function send() {
-    const result = await transporter.sendMail({
-      from: "WarsztApp",
-      to: email,
-      subject: "umów wizytę w naszym warsztacie",
-      text: `Potwierdź prośbę o wizytę w ${garageId} w dniu: ${date} o godzinie ${hour}:${minute} klikając w link: ${link}`,
-    });
-
-    console.log(JSON.stringify(result, null, 4));
-  }
   res.json({ message: "sent" });
 };
 
