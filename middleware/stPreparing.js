@@ -34,13 +34,15 @@ const stPreparing = async (req, res, next) => {
               } else {
               }
             } else {
-              console.log("prepering4");
-              const mongoSt = await St.findById(s._id).exec();
-              mongoSt.items = s.items;
-              mongoSt.price = s.price;
-              mongoSt.vat = s.vat;
-              mongoSt.save();
-              return s?._id;
+              if (s?._id) {
+                console.log("prepering4");
+                const mongoSt = await St.findById(s._id).exec();
+                if (mongoSt) mongoSt.items = s.items;
+                if (mongoSt) mongoSt.price = s.price;
+                if (mongoSt) mongoSt.vat = s.vat;
+                if (mongoSt) mongoSt.save();
+                return s?._id;
+              }
             }
           }),
         ).then((data) => {
