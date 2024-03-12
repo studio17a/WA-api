@@ -82,7 +82,7 @@ const sendEmail = async (req, res) => {
       { expiresIn: "15m" },
     );
 
-    link = `https://tg3vhf-3000.csb.app/${garageId}/confirmation/${date}/${confirmationToken}`;
+    link = `https://warszt.app/${garageId}/confirmation/${date}/${confirmationToken}`;
 
     let subject = "umów wizytę w naszym warsztacie";
     let text = `Potwierdź prośbę o wizytę w ${garageId} w dniu: ${date} o godzinie ${hour}:${minute} klikając w link: ${link}`;
