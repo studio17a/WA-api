@@ -65,7 +65,7 @@ const sendEmail = async (req, res) => {
     process.env.ACCESS_TOKEN_SECRET,
     { expiresIn: "15m" },
   );
-  link = `https://tg3vhf-3000.csb.app/${garageId}/confirmation/${date}/${confirmationToken}`;
+  link = `https://warszt.app/${garageId}/confirmation/${date}/${confirmationToken}`;
   send();
 
   async function send() {
