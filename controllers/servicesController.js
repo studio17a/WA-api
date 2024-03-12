@@ -270,7 +270,7 @@ const createNewAppointment = async (req, res) => {
       if (data) {
         // Created
         return res.status(201).json({
-          message: `Potwierdzono wizytę w dniu ${allow.date} o godzinie ${allow.hour}:${allow.minute}`,
+          message: `Wysłano propozycję wizyty w dniu ${allow.date} o godzinie ${allow.hour}:${allow.minute}`,
           handledServivceId: data._id,
         });
       } else {
