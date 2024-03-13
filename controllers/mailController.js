@@ -85,7 +85,7 @@ const sendEmail = async (req, res) => {
     link = `https://warszt.app/${garageId}/confirmation/${date}/${confirmationToken}`;
 
     let subject = "umów wizytę w naszym warsztacie";
-    let text = `Potwierdź prośbę o wizytę w ${garageId} w dniu: ${date} o godzinie ${hour}:${minute} klikając w link: <a href: ${link}>${link}</a>`;
+    let text = `Potwierdź prośbę o wizytę w ${garageId} w dniu: ${date} o godzinie ${hour}:${minute} klikając w link: \n \r ${link}`;
 
     send(email, subject, text);
   }
