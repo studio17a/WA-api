@@ -251,6 +251,7 @@ const addNewItem = async (req, res) => {
     notes,
     author,
     brand,
+    model,
     authorname,
   } = req.body;
   console.log(req.body);
@@ -278,6 +279,7 @@ const addNewItem = async (req, res) => {
       garage,
       name,
       brand,
+      model,
       vehicleId,
       storage,
       quantity,
@@ -293,6 +295,7 @@ const addNewItem = async (req, res) => {
       name,
       vehicleId,
       brand,
+      model,
       storage,
       description,
       quantity,
@@ -331,7 +334,7 @@ const delItem = async (req, res) => {
   // Does the user exist to delete?
   const item = await Item.findById(iid).exec();
 
-  console.log("tu3");
+  console.log("tua3");
   if (!item) {
     return res.status(400).json({ message: "item not found" });
   }
