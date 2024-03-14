@@ -11,7 +11,7 @@ const io = require("socket.io-client");
 // @route GET /services
 // @access Private
 
-const socket = io("https://warsztap-api.onrender.com", {
+const socket = io("https://tg3vhf-3500.csb.app", {
   transports: ["websocket", "polling", "flashsocket"],
 });
 
@@ -91,13 +91,15 @@ const getServicesByVehicleId = async (req, res) => {
   // console.log(
   //  `getServicesByVehicleId: ${req.params.vehicleId}, ${req.params.gid}`,
   // );
+
+  // const vehicle = await Vehicle.findById(req.params.vehicleId).lean().exec();
   const services = await Service.find({
     garage: req.params.gid,
     vehicle: req.params.vehicleId,
   })
-    .sort("date")
-    .lean();
-
+    .populate("user")
+    .sort("-createdAt")
+    .exec();
   // const stservices = await Promise.all(
   //   services.map(async (service) => {
   //     let s = [];
