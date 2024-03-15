@@ -46,18 +46,23 @@ const getUserByItem = async (req, res) => {
 
   // console.log(req.body);
   const items = await Item.find({
-    name: { $regex: req.body.item.toUpperCase() },
+    name: { $regex: req.body.item, $options: "i" },
   }).lean();
 
   console.log(items.length);
   const services = await Promise.all(
     items.map(
       async (item) =>
-        await Service.find({ "items._id": ObjectId(item._id) }).lean(),
+        await Service.find({
+          $or: [
+            { "items.item": item._id.toString() },
+            { "items._id": ObjectId(item._id) },
+          ],
+        }).lean(),
     ),
   );
 
-  console.log(services);
+  // console.log(services);
   const concatServices = [].concat(...services);
 
   const users = await Promise.all(
@@ -244,7 +249,7 @@ const deleteUser = async (req, res) => {
   // Does the user exist to delete?
   const user = await User.findById(id).exec();
 
-  console.log("tu3");
+  console.log("tuu3");
   if (!user) {
     return res.status(400).json({ message: "User not found" });
   }
