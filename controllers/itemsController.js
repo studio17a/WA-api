@@ -6,7 +6,7 @@ const Service = require("../models/Service");
 const getAllItems = async (req, res) => {
   console.log(`getAllItems`);
   console.log(req.params);
-  const items = await Item.find().select().lean();
+  const items = await Item.find().populate("user").select().lean();
 
   if (!items?.length) {
     return res.status(400).json({ message: "No i found" });
