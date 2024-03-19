@@ -1,12 +1,15 @@
 const User = require("../models/User");
+const Garage = require("../models/Garage");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 var imaps = require("imap-simple");
+const ObjectId = require("mongodb").ObjectId;
 // @desc Login
 // @route POST /auth
 // @access Public
 // bixa ucqx wjxs lsue
 const login = async (req, res) => {
+  console.log("trytologin");
   const { username, password } = req.body;
   // return res
   //   .status(400)
@@ -21,9 +24,19 @@ const login = async (req, res) => {
   if (!foundUser) {
     return res.status(401).json({ message: "Unauthorized" });
   }
+  const isadmin = await Garage.find({
+    "stuff.admins": ObjectId(foundUser._id),
+  })
+    .select("_id")
+    .lean();
+  const isemployee = await Garage.find({
+    "stuff.employees": ObjectId(foundUser._id),
+  })
+    .select("_id")
+    .lean();
 
+  const roles = { isadmin, isemployee };
   const match = await bcrypt.compare(password, foundUser.password);
-  console.log(`${password}, ${foundUser.password}`);
   if (!match) return res.status(401).json({ message: "Unauthorized" });
 
   const accessToken = jwt.sign(
@@ -31,7 +44,7 @@ const login = async (req, res) => {
       UserInfo: {
         _id: foundUser._id,
         username: foundUser.username,
-        roles: foundUser.roles,
+        roles: roles,
         email: foundUser.email,
         phone: foundUser.phone,
       },
@@ -44,7 +57,7 @@ const login = async (req, res) => {
     {
       _id: foundUser._id,
       username: foundUser.username,
-      roles: foundUser.roles,
+      roles: roles,
       email: foundUser.email,
       phone: foundUser.phone,
     },
@@ -86,12 +99,24 @@ const refresh = (req, res) => {
 
       if (!foundUser) return res.status(401).json({ message: "Unauthorized" });
 
+      const isadmin = await Garage.find({
+        "stuff.admins": ObjectId(foundUser._id),
+      })
+        .select("_id")
+        .lean();
+      const isemployee = await Garage.find({
+        "stuff.employees": ObjectId(foundUser._id),
+      })
+        .select("_id")
+        .lean();
+
+      const roles = { isadmin, isemployee };
       const accessToken = jwt.sign(
         {
           UserInfo: {
             _id: foundUser._id,
             username: foundUser.username,
-            roles: foundUser.roles,
+            roles: roles,
             email: foundUser.email,
             phone: foundUser.phone,
           },
