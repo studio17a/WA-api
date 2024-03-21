@@ -4,7 +4,6 @@ const usersController = require("../controllers/usersController");
 const verifyJWT = require("../middleware/verifyJWT");
 
 // router.use(verifyJWT);
-
 router
   .post("/getusers/:gid", verifyJWT, usersController.getAllUsers)
   .post("/", usersController.createNewUser)
