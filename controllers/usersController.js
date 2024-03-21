@@ -13,8 +13,8 @@ const ObjectId = require("mongodb").ObjectId;
 const getAllUsers = async (req, res) => {
   // Get all users from MongoDB
   const { gid } = req.params;
-  const { uid } = req.body;
-  console.log(`getAllUsers`);
+  const { uid, detailsId } = req.body;
+  console.log(`getAllUsers: ${detailsId} - ${uid}`);
   if (gid === "undefined") {
     return res.status(404).json({ message: "Specify a garage" });
   }
@@ -23,13 +23,9 @@ const getAllUsers = async (req, res) => {
   const isadmin = garage.stuff.admins?.filter((u) => u == uid).length > 0;
   const isemployee = garage.stuff.employees?.filter((u) => u == uid).length > 0;
 
-  console.log(garage.stuff);
-  console.log(uid);
-  console.log(isadmin);
-  console.log(isemployee);
   let users = {};
 
-  if (isadmin || isemployee) {
+  if (uid !== detailsId && (isadmin || isemployee)) {
     users = await User.find({ garages: { $elemMatch: { garage: gid } } })
       .select("-password")
       .lean();
@@ -37,7 +33,6 @@ const getAllUsers = async (req, res) => {
     users = await User.find({ _id: uid.toString() }).select("-password").lean();
   }
 
-  console.log(users);
   // If no users
   if (!users) {
     return res.status(400).json({ message: "No users found" });
