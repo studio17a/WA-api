@@ -1,4 +1,5 @@
 const User = require("../models/User");
+const Garage = require("../models/Garage");
 const Service = require("../models/Service");
 const Vehicle = require("../models/Vehicle");
 const Item = require("../models/Item");
@@ -12,18 +13,33 @@ const ObjectId = require("mongodb").ObjectId;
 const getAllUsers = async (req, res) => {
   // Get all users from MongoDB
   const { gid } = req.params;
-  console.log(req.params);
+  const { uid } = req.body;
   console.log(`getAllUsers`);
   if (gid === "undefined") {
     return res.status(404).json({ message: "Specify a garage" });
   }
-  const users = await User.find({ garages: { $elemMatch: { garage: gid } } })
-    .select("-password")
-    .lean();
+  const garage = await Garage.findById(gid);
 
-  // console.log(users);
+  const isadmin = garage.stuff.admins?.filter((u) => u == uid).length > 0;
+  const isemployee = garage.stuff.employees?.filter((u) => u == uid).length > 0;
+
+  console.log(garage.stuff);
+  console.log(uid);
+  console.log(isadmin);
+  console.log(isemployee);
+  let users = {};
+
+  if (isadmin || isemployee) {
+    users = await User.find({ garages: { $elemMatch: { garage: gid } } })
+      .select("-password")
+      .lean();
+  } else {
+    users = await User.find({ _id: uid.toString() }).select("-password").lean();
+  }
+
+  console.log(users);
   // If no users
-  if (!users?.length) {
+  if (!users) {
     return res.status(400).json({ message: "No users found" });
   }
 

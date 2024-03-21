@@ -6,7 +6,7 @@ const verifyJWT = require("../middleware/verifyJWT");
 // router.use(verifyJWT);
 
 router
-  .get("/:gid", verifyJWT, usersController.getAllUsers)
+  .post("/getusers/:gid", verifyJWT, usersController.getAllUsers)
   .post("/", usersController.createNewUser)
   .patch("/", verifyJWT, usersController.updateUser)
   .delete("/", verifyJWT, usersController.deleteUser);
