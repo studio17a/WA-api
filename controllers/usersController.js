@@ -14,9 +14,14 @@ const getAllUsers = async (req, res) => {
   // Get all users from MongoDB
   const { gid } = req.params;
   const { uid, detailsId } = req.body;
-  console.log(`getAllUsers: ${detailsId} - ${uid}`);
-  if (gid === "undefined") {
-    return res.status(404).json({ message: "Specify a garage" });
+  console.log(`getAllUsers: ${detailsId} - ${uid}: ${gid}`);
+  if (!gid || gid == "undefined") {
+    if (uid === detailsId) {
+      const users = await User.find({ _id: uid.toString() })
+        .select("-password")
+        .lean();
+      res.json(users);
+    } else res.json([]);
   }
   const garage = await Garage.findById(gid);
 
