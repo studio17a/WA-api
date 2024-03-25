@@ -3,9 +3,11 @@ const User = require("../models/User");
 const Vehicle = require("../models/Vehicle");
 const Item = require("../models/Item");
 const St = require("../models/St");
+const Garage = require("../models/Garage");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const io = require("socket.io-client");
+const ObjectId = require("mongodb").ObjectId;
 
 // @desc Get all services
 // @route GET /services
@@ -208,7 +210,7 @@ const createNewAppointment = async (req, res) => {
         author,
         authorname,
       } = decoded.AppointmentInfo;
-      const foundUser = await User.findById(user).exec();
+      const foundUser = await User.findById(user).lean();
 
       if (!foundUser) return res.status(401).json({ message: "Unauthorized" });
       // if (foundUser) {
@@ -245,7 +247,24 @@ const createNewAppointment = async (req, res) => {
         // console.log(`req.params.id: ${req.params.id}`);
         return data;
       });
+    const user = await User.findById(allow.user).exec();
+    if (user.garages) {
+      let addGarage = true;
+      user.garages.map((g) => {
+        if (g._id == allow.garageId) {
+          addGarage = false;
+        }
+      });
+      if (addGarage) {
+        user.garages = [...user.garages, { _id: ObjectId(allow.garageId) }];
+      }
+    } else {
+      user.garages = [{ _id: ObjectId(allow.garageId) }];
+    }
 
+    console.log(user.garages);
+
+    const updatedUser = await user.save();
     // console.log(`admins`);
     // console.log(allow);
     const appointment = await Service.create({

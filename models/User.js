@@ -13,10 +13,6 @@ const userSchema = new mongoose.Schema({
         required: false,
         ref: "Garage",
       },
-      permission: {
-        type: Boolean,
-        default: false,
-      },
     },
   ],
   password: {
