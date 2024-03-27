@@ -13,7 +13,7 @@ const ObjectId = require("mongodb").ObjectId;
 // @route GET /services
 // @access Private
 
-const socket = io("https://tg3vhf-3500.csb.app", {
+const socket = io("https://warsztap-api.onrender.com", {
   transports: ["websocket", "polling", "flashsocket"],
 });
 
