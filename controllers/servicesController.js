@@ -36,7 +36,7 @@ const getAllServices = async (req, res) => {
   // If no services
 
   if (services?.length <= 0) {
-    return res.status(200).json({ message: "No services found" });
+    return res.status(200).json([]);
   }
 
   // console.log(`getAllServices2`);
