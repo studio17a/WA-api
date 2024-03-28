@@ -1,12 +1,15 @@
 require("dotenv").config();
 require("express-async-errors");
 const express = require("express");
+const passport = require("passport");
+require("./config/passport.js");
 const app = express();
 const path = require("path");
 const { logger, logEvents } = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const cookieSession = require("cookie-session");
 const corsOptions = require("./config/corsOptions");
 const connectDB = require("./config/dbConn");
 const mongoose = require("mongoose");
@@ -15,6 +18,16 @@ const PORT = process.env.PORT || 3500;
 console.log(process.env.NODE_ENV);
 
 connectDB();
+
+app.use(
+  cookieSession({
+    name: "google-auth-session",
+    keys: ["key1", "key2"],
+  }),
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use(logger);
 
@@ -25,9 +38,27 @@ app.use(express.json());
 
 app.use(cookieParser());
 
+app.get("/auth/failed", (error, req, res, next) => {
+  res.send("Failed");
+});
+app.get(
+  "/auth/google",
+  passport.authenticate("google", { scope: ["email", "profile"] }),
+);
+app.get(
+  "/auth/google/callback",
+  passport.authenticate("google", {
+    failureRedirect: "/auth/failed",
+  }),
+  function (req, res) {
+    res.redirect("/auth/success");
+  },
+);
+
 app.use("/", express.static(path.join(__dirname, "public")));
 
 app.use("/", require("./routes/root"));
+app.use("/auth/success", require("./routes/googleAuthRoutes"));
 app.use("/auth", require("./routes/authRoutes"));
 app.use("/users", require("./routes/userRoutes"));
 app.use("/vehicles", require("./routes/vehicleRoutes"));
