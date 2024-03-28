@@ -56,7 +56,6 @@ app.get(
 );
 
 app.use("/", express.static(path.join(__dirname, "public")));
-
 app.use("/", require("./routes/root"));
 app.use("/auth/success", require("./routes/googleAuthRoutes"));
 app.use("/auth", require("./routes/authRoutes"));

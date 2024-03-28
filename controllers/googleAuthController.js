@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 var imaps = require("imap-simple");
 const ObjectId = require("mongodb").ObjectId;
-
 const success = async (req, res) => {
   const email = req.user.emails[0].value;
   const foundUser = await User.findOne({ email: email }).exec();
